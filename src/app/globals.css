@@ -1,21 +1,61 @@
+@import url("@radix-ui/colors/gray.css");
+@import url("@radix-ui/colors/gray-alpha.css");
+@import url("@radix-ui/colors/gray-dark.css");
+@import url("@radix-ui/colors/gray-dark-alpha.css");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+	--boxBg: var(--gray-1);
+	--inputBg: var(--gray-2);
+	--text: var(--gray-12);
+	--border: var(--gray-3);
+	--shadow: 0 0 0 1px var(--border);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation: none;
+	mix-blend-mode: normal;
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+
+	:root {
+		--background: var(--gray-1);
+		--foreground: var(--gray-12);
+
+		--scrollbar-thumb: var(--gray-3);
+		--scrollbar-track: transparent;
+	}
+
+	* {
+		--webkit-font-smoothing: antialiased;
+		--moz-osx-font-smoothing: grayscale;
+		text-wrap: pretty;
+		text-rendering: optimizelegibility;
+		font-variant-ligatures: common-ligatures;
+	}
+
+	html {
+		scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+		scrollbar-gutter: stable;
+		scrollbar-width: thin;
+		scroll-behavior: smooth;
+
+		@apply text-base text-foreground bg-background;
+
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6 {
+			@apply font-medium;
+		}
+
+	}
+
 }

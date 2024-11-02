@@ -1,101 +1,132 @@
-import Image from "next/image";
+import * as motion from "framer-motion/client";
+import { Link } from "next-view-transitions";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+	return (
+		<motion.div className="text-gray-11">
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
-  );
+			<header>
+				<h1 className="text-gray-12">
+					Jérémy Caruelle
+				</h1>
+				<span className="text-gray-9">
+					Fullstack Engineer
+				</span>
+			</header>
+
+			<main className="mt-16 flex flex-col gap-16 leading-7">
+
+				<section className="leading-7">
+					<p>
+						Welcome to the dynamic world of a creative mind dedicated 
+						to harmonizing design aesthetics with the precision of engineering, 
+						crafting seamless, polished software and interfaces.
+					</p>
+				</section>
+
+				<section className="leading-7 flex flex-col gap-6">
+					<h2 className="text-gray-12">
+						Today
+					</h2>
+					<div className="flex flex-col gap-8">
+						<p>
+							I have just finished a new version of this website, opting for a 
+							more streamlined and understated design that better reflects my 
+							style and vision.
+						</p>
+						<p>
+							I am currently in the second year of my Master’s degree in Cloud 
+							Computing at INSSET, while also gaining hands-on experience as an 
+							apprentice at AXA Climate.
+						</p>
+						<p>
+							Fascinated by the endless possibilities of technology, I am always
+							on the lookout for new challenges. This inspired me to create
+							the crafts section.
+						</p>
+					</div>
+
+				</section>
+
+				<section className="leading-7 flex flex-col gap-6">
+					<h2 className="text-gray-12">
+						Connect
+					</h2>
+					<div className="flex flex-col gap-8">
+						<p>
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+						</p>
+					</div>
+				</section>
+
+				{/* <section className="leading-7 flex flex-col gap-6">
+					<h2 className="text-gray-12">
+						Connect
+					</h2>
+					<div className="flex flex-col gap-8">
+						<p>
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+
+
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+
+							Reach me at hi@jeremycaruelle.com, see more of my work on 𝕏, my code on
+							GitHub, or check out what I’m up to on read.cv
+
+						</p>
+					</div>
+				</section> */}
+
+			</main>
+
+		</motion.div>
+	);
 }
