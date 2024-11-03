@@ -1,17 +1,17 @@
 "use client"
 
-import { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import useSetTheme from '@/hooks/useSetTheme'
+import { useState, useEffect, useRef, useCallback } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { usePathname } from "next/navigation"
+import Link from "next/link"
 
+import useSetTheme from "@/hooks/useSetTheme"
 
-const items = {
-  '/': 'Home',
-  '/writings': 'Writings',
-  '/crafts': 'Crafts',
-  '/projects': 'Projects',
+const ROUTES = {
+  "/"           : "Home",
+  "/writings"   : "Writings",
+  "/projects"   : "Projects",
+  "/crafts"     : "Crafts",
 }
 
 export default function Navbar() {
@@ -19,60 +19,87 @@ export default function Navbar() {
     const pathname = usePathname()
     const [ activeItem, setActiveItem ] = useState( 0 )
 
-    const switchTheme   = useRef( null )
-        , clickSound    = useRef( new Audio( "/click.mp3" ) )
+    const switchThemeRef = useRef<HTMLButtonElement>( null )
+    const clickSoundRef = useRef<HTMLAudioElement | null>( null )
 
+    const { handleViewTransition, isTransitioning } = useSetTheme()
 
     useEffect(() => {
-        const basePath = pathname.split('/')[1] ? `/${pathname.split('/')[1]}` : '/'
-        setActiveItem(Object.keys(items).indexOf(basePath))
-    }, [pathname])
+        clickSoundRef.current = new Audio( "/click.mp3" )
+    }, [])
 
-    const { handleViewTransition } = useSetTheme( )
+    useEffect(() => {
+
+        const basePath = `/${ pathname.split( "/" )[1] || "" }`
+        setActiveItem( Object.keys( ROUTES ).indexOf( basePath ) )
+    
+    }, [ pathname ])
+
+    const handleThemeSwitch = useCallback(() => {
+
+        if ( isTransitioning || !clickSoundRef.current ) return
+       
+        clickSoundRef.current.currentTime = 0
+        clickSoundRef.current.play()
+       
+        handleViewTransition({ ref: switchThemeRef })
+    
+    }, [ handleViewTransition, isTransitioning ])
 
     return (
-        <nav className="pointer-events-none fixed inset-x-0 bottom-0 mx-auto mb-4 flex h-12 z-50">
+        <motion.nav
+            transition={{ type: "spring", bounce: .2, duration: .7, delay: .2 }}
+            initial={{ y: 65, scale: .9 }}
+            animate={{ y: 0, scale: 1 }}
+            className="pointer-events-none fixed inset-x-0 bottom-0 mx-auto mb-4 flex h-11 z-50"
+        >
             <ol className="overflow-y-hidden overflow-x-auto pointer-events-auto dark:bg-[rgba(33,33,33,.5)] bg-white relative p-2 flex justify-center items-center backdrop-blur-[24px] shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_1px_1px_rgba(0,0,0,0.02),0_4px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_0_0_1px_hsla(0,0%,100%,0.06)] rounded-lg mx-auto max-w-[calc(100vw-2rem)]">
+                
                 <AnimatePresence>
-                    { Object.entries(items).map( ( [ path, name ], i ) => {
-                        const isActive = i === activeItem
-                        return (
-                            <motion.li
-                                key={path}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}    
-                                exit={{ opacity: 0 }}
-                                transition={{ duration: 0.2, delay: i * 0.05 }}
-                            >
-                                <Link
-                                    href={ path }
-                                    className={ `block px-4 py-2 rounded-full text-sm font-medium relative data-[active]:text-gray-12` }
-                                    data-active={ isActive }
-                                >
-                                { isActive && (
-                                    <motion.div
-                                        className="absolute inset-0 bg-gray-3 rounded-md -z-10"
-                                        layoutId="activeNavItem"
-                                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                                        initial={ false }
-                                    />
-                                )}
-                                    { name }
-                                </Link>
-                            </motion.li>
-                        )
-                    })}
+                    { Object.entries( ROUTES ).map( ( [ path, name ], i ) => (
+                        <NavItem key={ path } path={ path } name={ name } isActive={ i === activeItem } />
+                    ))}
                 </AnimatePresence>
-                <div className="w-[1px] mx-3 h-5 flex items-center bg-gray-6" />
-                <button className="size-4 flex items-center justify-center bg-gray-6 rounded-md mr-2"
-                    ref={ switchTheme }
-                    // cursor-pointer select-none p-2 m-3 ml-[16px] mr-[8px] mb-[14px] mt-[13px] relative hover:border-3 size-4 rounded-md dark:bg-neutral-400 bg-neutral-700
-                    onClick={ () => {
-                        clickSound.current.play()
-                        handleViewTransition({ ref: switchTheme })
-                    } }
+                
+                <div className="w-[1px] mx-3 h-5 flex items-center bg-gray-4" />
+        
+                <button
+                    ref={ switchThemeRef }
+                    className="size-4 flex items-center justify-center bg-gray-10 rounded-md mr-2 hover:bg-gray-11 hover:scale-110 transition-all duration-500"
+                    onClick={ handleThemeSwitch }
+                    aria-label="Switch theme"
                 />
             </ol>
-        </nav>
+        </motion.nav>
     )
+}
+
+interface NavItemProps {
+    path: string
+    name: string
+    isActive: boolean
+}
+
+function NavItem({ path, name, isActive }: NavItemProps) {
+    
+    return (
+        <li>
+            <Link
+                href={ path }
+                className="block px-4 py-1.5 font-base text-sm relative data-[active]:text-gray-12 transition-colors"
+                data-active={ isActive }
+            >
+                { isActive && (
+                    <motion.div
+                        className="absolute inset-0 bg-gray-4 rounded-md -z-10"
+                        layoutId="activeNavItem"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        initial={ false }
+                    />
+                )}
+                { name }
+            </Link>
+        </li>
+    )
+
 }

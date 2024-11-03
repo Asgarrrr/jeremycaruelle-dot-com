@@ -7,26 +7,23 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-	--boxBg: var(--gray-1);
-	--inputBg: var(--gray-2);
-	--text: var(--gray-12);
-	--border: var(--gray-3);
-	--shadow: 0 0 0 1px var(--border);
-}
-
 ::view-transition-old(root),
 ::view-transition-new(root) {
 	animation: none;
 	mix-blend-mode: normal;
 }
 
+@property --underline-color {
+	syntax: "<color>";
+	initial-value: gray;
+	inherits: false;
+}
+
 @layer base {
 
 	:root {
-		--background: var(--gray-1);
+		--background: var(--gray-a1);
 		--foreground: var(--gray-12);
-
 		--scrollbar-thumb: var(--gray-3);
 		--scrollbar-track: transparent;
 	}
@@ -54,6 +51,71 @@
 		h5,
 		h6 {
 			@apply font-medium;
+		}
+
+		em {
+			@apply italic font-medium text-lg font-newsreader;
+		}
+
+		@property --underline-color {
+			syntax: "<color>";
+			initial-value: var(--gray-6);
+			inherits: false;
+		}
+		
+		*:not(code) > .link {
+			position: relative;
+			padding: 2px 0;
+			margin-right: 2px;
+			--underline-offset: 4px;
+			--underline-thickness: 1.5px;
+			--underline-color: var(--gray-6);
+
+			--bg-pos: calc(1em + var(--underline-offset) + 1px);
+			--bg-circle: var(--underline-color);
+			--left: calc(var(--underline-thickness) / 2);
+			--width: calc(100% - var(--underline-thickness));
+		
+			--bg-line: linear-gradient(var(--underline-color), var(--underline-color))
+				no-repeat var(--left) var(--bg-pos) / var(--width) var(--underline-thickness);
+		
+			--bg-left: radial-gradient(
+					var(--underline-thickness) circle at center,
+					var(--bg-circle) 5%,
+					transparent 51%
+				)
+				no-repeat left var(--bg-pos) / var(--underline-thickness)
+				var(--underline-thickness);
+		
+			--bg-right: radial-gradient(
+					var(--underline-thickness) circle at center,
+					var(--bg-circle) 50%,
+					transparent 51%
+				)
+				no-repeat right var(--bg-pos) / var(--underline-thickness)
+				var(--underline-thickness);
+			--bg-rounded-underline: var(--bg-left), var(--bg-right), var(--bg-line);
+		
+			background: var(--bg-rounded-underline);
+			box-decoration-break: clone;
+			transition: --underline-color .3s cubic-bezier(0.4, 0, 0.2, 1), color .3s cubic-bezier(0.4, 0, 0.2, 1);
+			
+			&:focus-visible,
+			&:hover {
+				--underline-color: var(--gray-8);
+			}
+		
+			& svg {
+				transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
+				color: var(--gray-6);
+				min-height: 24px;
+				background: var(--gray-2);
+			}
+		
+			&:hover svg {
+				transform: translate3d(2px, -2px, 0);
+				color: var(--gray-8);
+			}
 		}
 
 	}

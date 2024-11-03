@@ -8,30 +8,25 @@ export default function useSetTheme( ) {
 
     const { theme, setTheme } = useTheme();
 	const [ isThumbnail, setIsThumbnail ] = useState( false );
-    const [ transition, setTransition ] = useState( false );
+    const [ isTransitioning, setIsTransitioning ] = useState( false );
 
     async function handleViewTransition({ ref }: { ref: React.RefObject<HTMLElement> }) {
 
         if (
             !ref.current ||
-            // @ts-expect-error - startViewTransition is not yet in the types for document
 			!document.startViewTransition ||
 			window.matchMedia( "(prefers-reduced-motion: reduce)" ).matches
-		) {
+		)
 			return;
-		} else 
-
-        // @ts-expect-error - startViewTransition is not yet in the types for document
-        if ( !transition ) await document.startViewTransition(() => {
+		
+        await document.startViewTransition(() => {
 			flushSync(() => {
-                setTransition( true );
+				setIsTransitioning( true );
 				setIsThumbnail( !isThumbnail );
-				setTheme(theme === "light" ? "dark" : "light");
+				setTheme( theme === "light" ? "dark" : "light" );
 			});
-		}).ready;
-
-        setTransition( false );
-
+		}).ready
+		
         const { top, left, width, height } = ref.current.getBoundingClientRect();
 		
         const x         = left + width / 2
@@ -56,8 +51,11 @@ export default function useSetTheme( ) {
 			}
 		);
 
+		setTimeout(() => {
+			setIsTransitioning( false );
+		}, 500 );
     }
 
-    return { theme, setTheme, isThumbnail, transition, handleViewTransition };
+    return { theme, setTheme, isThumbnail, isTransitioning, handleViewTransition };
 
 }
