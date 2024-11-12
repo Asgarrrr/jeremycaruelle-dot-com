@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import Navbar from "@/components/navbar";
+import { ViewTransitionProvider } from "@/components/view-transitions";
 
 const geistSans = localFont({
 	src: "./fonts/GeistVF.woff",
@@ -34,18 +35,23 @@ export default function RootLayout({
 }: Readonly<{
   	children: React.ReactNode;
 }>) {
+
 	return (
 		<html lang="en" suppressHydrationWarning>
       		<body
         		className={ `${ geistSans.variable } ${ geistMono.variable } ${ NewsreaderItalic.variable } font-sans antialiased` }
       		>
 				<Providers>
-					<div id="shat" className="z-10 fixed w-screen inset-x-0 top-0 h-20 bg-gradient-to-t dark:to-[#161616] from-transparent pointer-events-none"></div>
-					<main className="mx-auto max-w-screen-sm overflow-x-hidden px-6 py-48 md:overflow-x-visible">
-        				{ children }
-					</main>
-					<div id="shab" className="z-10 fixed w-screen inset-x-0 bottom-0 h-20 bg-gradient-to-t dark:from-[#161616] to-transparent pointer-events-none"></div>
-					<Navbar />
+					
+					<ViewTransitionProvider>
+						<div className="top-shadow top-0 bg-gradient-to-b from-gray-1 to-transparent" />
+						<main className="mx-auto max-w-screen-sm px-6 py-[calc(4vw+6vh)]">
+							{ children }
+						</main>
+						<Navbar />
+						<div className="bottom-shadow bottom-0 bg-gradient-to-t from-gray-1 to-transparent" />
+                	</ViewTransitionProvider>
+					
 				</Providers>
       		</body>
     	</html>

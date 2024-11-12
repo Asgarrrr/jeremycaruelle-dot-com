@@ -1,12 +1,13 @@
 import { AppThemeProvider } from "@/components/theme";
-import { ViewTransitions } from "next-view-transitions";
+import { ViewTransitions as GlobalViewTransitions } from "next-view-transitions";
+import { ViewTransitionProvider } from "@/components/view-transitions"
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
     return (
-        <ViewTransitions>
+        <GlobalViewTransitions>
             <AppThemeProvider>
                 { children }
             </AppThemeProvider>
-        </ViewTransitions>
+        </GlobalViewTransitions>
     );
 };

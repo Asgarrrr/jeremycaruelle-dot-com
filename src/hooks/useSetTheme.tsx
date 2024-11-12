@@ -3,13 +3,14 @@
 import { useState } from "react"
 import { useTheme } from "next-themes"
 import { flushSync } from "react-dom";
+import { useViewTransition } from "@/components/view-transitions";
 
 export default function useSetTheme( ) {
 
     const { theme, setTheme } = useTheme();
 	const [ isThumbnail, setIsThumbnail ] = useState( false );
-    const [ isTransitioning, setIsTransitioning ] = useState( false );
-
+	const { setIsTransitioning } = useViewTransition();
+	
     async function handleViewTransition({ ref }: { ref: React.RefObject<HTMLElement> }) {
 
         if (
@@ -17,11 +18,12 @@ export default function useSetTheme( ) {
 			!document.startViewTransition ||
 			window.matchMedia( "(prefers-reduced-motion: reduce)" ).matches
 		)
-			return;
+			return setTheme( theme === "light" ? "dark" : "light" );
 		
-        await document.startViewTransition(() => {
+		setIsTransitioning( true );
+        
+		await document.startViewTransition(() => {
 			flushSync(() => {
-				setIsTransitioning( true );
 				setIsThumbnail( !isThumbnail );
 				setTheme( theme === "light" ? "dark" : "light" );
 			});
@@ -56,6 +58,6 @@ export default function useSetTheme( ) {
 		}, 500 );
     }
 
-    return { theme, setTheme, isThumbnail, isTransitioning, handleViewTransition };
+    return { theme, setTheme, isThumbnail, handleViewTransition };
 
 }

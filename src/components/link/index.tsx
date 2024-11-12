@@ -33,16 +33,18 @@ export default function Link( {
     }
     
     return (
-        <NextLink
-            href={ href }
-            onClick={ handleClick }
-            prefetch={ !isExternal && prefetch }
-            target={ isExternal ? "_blank" : undefined }
-            rel={ isExternal ? "noopener noreferrer" : undefined }
-            className={ cn( "link", className ) }
-            { ...props }
-        >
-            { children }
+        <span className="link">
+            <NextLink
+                href={ href }
+                onClick={ handleClick }
+                prefetch={ !isExternal && prefetch }
+                target={ isExternal ? "_blank" : undefined }
+                rel={ isExternal ? "noopener noreferrer" : undefined }
+                className={ cn( className ) }
+                { ...props }
+            >
+                { children }
+            </NextLink>
             { isExternal && showExternalIcon && (
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -61,6 +63,6 @@ export default function Link( {
                     <polyline points="7 7 17 7 17 17" />
                 </svg>
             )}
-        </NextLink>
+        </span>
     )
 }

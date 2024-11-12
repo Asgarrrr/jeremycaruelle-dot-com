@@ -3,9 +3,10 @@
 import { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { usePathname } from "next/navigation"
-import Link from "next/link"
+import Link from "@/components/link"
 
 import useSetTheme from "@/hooks/useSetTheme"
+import { useViewTransition } from "@/components/view-transitions"
 
 const ROUTES = {
   "/"           : "Home",
@@ -22,7 +23,8 @@ export default function Navbar() {
     const switchThemeRef = useRef<HTMLButtonElement>( null )
     const clickSoundRef = useRef<HTMLAudioElement | null>( null )
 
-    const { handleViewTransition, isTransitioning } = useSetTheme()
+    const { handleViewTransition } = useSetTheme()
+    const { isTransitioning } = useViewTransition()
 
     useEffect(() => {
         clickSoundRef.current = new Audio( "/click.mp3" )
@@ -53,7 +55,7 @@ export default function Navbar() {
             animate={{ y: 0, scale: 1 }}
             className="pointer-events-none fixed inset-x-0 bottom-0 mx-auto mb-4 flex h-11 z-50"
         >
-            <ol className="overflow-y-hidden overflow-x-auto pointer-events-auto dark:bg-[rgba(33,33,33,.5)] bg-white relative p-2 flex justify-center items-center backdrop-blur-[24px] shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_1px_1px_rgba(0,0,0,0.02),0_4px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_0_0_1px_hsla(0,0%,100%,0.06)] rounded-lg mx-auto max-w-[calc(100vw-2rem)]">
+            <ol className="dark:bg-[rgba(33,33,33,.5)] bg-white overflow-y-hidden overflow-x-auto pointer-events-auto  relative p-2 flex justify-center items-center backdrop-blur-[24px] shadow-[0_0_0_1px_rgba(0,0,0,0.08),0_1px_1px_rgba(0,0,0,0.02),0_4px_8px_rgba(0,0,0,0.04)] dark:shadow-[0_0_0_1px_hsla(0,0%,100%,0.06)] rounded-lg mx-auto max-w-[calc(100vw-2rem)]">
                 
                 <AnimatePresence>
                     { Object.entries( ROUTES ).map( ( [ path, name ], i ) => (
@@ -83,7 +85,7 @@ interface NavItemProps {
 function NavItem({ path, name, isActive }: NavItemProps) {
     
     return (
-        <li>
+        <li className="nav-item">
             <Link
                 href={ path }
                 className="block px-4 py-1.5 font-base text-sm relative data-[active]:text-gray-12 transition-colors"

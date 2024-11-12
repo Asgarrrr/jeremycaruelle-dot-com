@@ -13,6 +13,15 @@
 	mix-blend-mode: normal;
 }
 
+
+::view-transition-old(page-view-transition) {
+	animation: 0.3s ease both fade-out;
+}
+
+::view-transition-new(page-view-transition) {
+	animation: 0.3s 0.3s ease both fade-in;
+}
+
 @property --underline-color {
 	syntax: "<color>";
 	initial-value: gray;
@@ -20,23 +29,36 @@
 }
 
 @layer base {
-
+	
 	:root {
-		--background: var(--gray-a1);
+		--background: var(--gray-1);
 		--foreground: var(--gray-12);
 		--scrollbar-thumb: var(--gray-3);
 		--scrollbar-track: transparent;
+		
+		--selection-background: var(--gray-4);
+		--selection-foreground: var(--gray-12);
 	}
 
 	* {
-		--webkit-font-smoothing: antialiased;
-		--moz-osx-font-smoothing: grayscale;
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
 		text-wrap: pretty;
 		text-rendering: optimizelegibility;
 		font-variant-ligatures: common-ligatures;
 	}
 
+	*::selection {
+		color: var(--selection-foreground);
+		background-color: var(--selection-background);
+	}
+
 	html {
+
+		body {
+			scrollbar-gutter: stable;
+		}
+
 		scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
 		scrollbar-gutter: stable;
 		scrollbar-width: thin;
@@ -63,61 +85,138 @@
 			inherits: false;
 		}
 		
-		*:not(code) > .link {
-			position: relative;
-			padding: 2px 0;
-			margin-right: 2px;
-			--underline-offset: 4px;
-			--underline-thickness: 1.5px;
-			--underline-color: var(--gray-6);
+		*:not(code, .nav-item) > .link {
 
-			--bg-pos: calc(1em + var(--underline-offset) + 1px);
-			--bg-circle: var(--underline-color);
-			--left: calc(var(--underline-thickness) / 2);
-			--width: calc(100% - var(--underline-thickness));
-		
-			--bg-line: linear-gradient(var(--underline-color), var(--underline-color))
-				no-repeat var(--left) var(--bg-pos) / var(--width) var(--underline-thickness);
-		
-			--bg-left: radial-gradient(
-					var(--underline-thickness) circle at center,
-					var(--bg-circle) 5%,
-					transparent 51%
-				)
-				no-repeat left var(--bg-pos) / var(--underline-thickness)
-				var(--underline-thickness);
-		
-			--bg-right: radial-gradient(
-					var(--underline-thickness) circle at center,
-					var(--bg-circle) 50%,
-					transparent 51%
-				)
-				no-repeat right var(--bg-pos) / var(--underline-thickness)
-				var(--underline-thickness);
-			--bg-rounded-underline: var(--bg-left), var(--bg-right), var(--bg-line);
-		
-			background: var(--bg-rounded-underline);
-			box-decoration-break: clone;
-			transition: --underline-color .3s cubic-bezier(0.4, 0, 0.2, 1), color .3s cubic-bezier(0.4, 0, 0.2, 1);
+			display: inline-block;
+
+			& a {
+				position: relative;
+				padding: 2px 0;
+				margin-right: 2px;
+				--underline-offset: 4px;
+				--underline-thickness: 2px;
+				--underline-color: var(--gray-5);
+
+				--bg-pos: calc(1em + var(--underline-offset) + 1px);
+				--bg-circle: var(--underline-color);
+				--left: calc(var(--underline-thickness) / 2);
+				--width: calc(100% - var(--underline-thickness));
 			
-			&:focus-visible,
-			&:hover {
-				--underline-color: var(--gray-8);
+				--bg-line: linear-gradient(var(--underline-color), var(--underline-color))
+					no-repeat var(--left) var(--bg-pos) / var(--width) var(--underline-thickness);
+			
+				--bg-left: radial-gradient(
+						var(--underline-thickness) circle at center,
+						var(--bg-circle) 5%,
+						transparent 51%
+					)
+					no-repeat left var(--bg-pos) / var(--underline-thickness)
+					var(--underline-thickness);
+			
+				--bg-right: radial-gradient(
+						var(--underline-thickness) circle at center,
+						var(--bg-circle) 50%,
+						transparent 51%
+					)
+					no-repeat right var(--bg-pos) / var(--underline-thickness)
+					var(--underline-thickness);
+				--bg-rounded-underline: var(--bg-left), var(--bg-right), var(--bg-line);
+			
+				background: var(--bg-rounded-underline);
+				box-decoration-break: clone;
+				transition: --underline-color .3s cubic-bezier(0.4, 0, 0.2, 1), color .3s cubic-bezier(0.4, 0, 0.2, 1);
+				
+				&:focus-visible,
+				&:hover {
+					--underline-color: var(--gray-8);
+				}
+
 			}
-		
+
 			& svg {
 				transition: all .3s cubic-bezier(0.4, 0, 0.2, 1);
 				color: var(--gray-6);
-				min-height: 24px;
-				background: var(--gray-2);
 			}
 		
 			&:hover svg {
 				transform: translate3d(2px, -2px, 0);
 				color: var(--gray-8);
 			}
+
 		}
+
+		.top-shadow,
+		.bottom-shadow {
+			position: fixed;
+			left: 0;
+			right: 0;
+			height: 5rem;
+			width: 100%;
+			pointer-events: none;
+			z-index: 10;
+		}
+
+
+		/* 
+			Hugly hack - Some elements are not styled correctly 
+			during the transition. This is a workaround to fix that.
+		*/
+	
+		::view-transition-group(shadow-view-transition-top),
+		::view-transition-group(shadow-view-transition-bottom),
+		::view-transition-group(nav-view-transition) {
+			animation: none;
+			animation-duration: 0s;
+		}
+
+		@keyframes fade-in {
+			from {
+				opacity: 0;
+				transform: translateY(10px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+		
+		@keyframes fade-out {
+			from {
+				opacity: 1;
+				transform: translateY(0);
+			}
+			to {
+				opacity: 0;
+				transform: translateY(10px);
+			}
+		}
+
+		.page-transition {
+			& nav ol {
+				view-transition-name: nav-view-transition;
+			}
+			& > main {
+				view-transition-name: page-view-transition;
+			}
+			& .top-shadow {
+				view-transition-name: shadow-view-transition-top;
+			}
+			& .bottom-shadow {
+				view-transition-name: shadow-view-transition-bottom;
+			}
+		}
+
+		
+		
 
 	}
 
+}
+
+
+
+::view-transition-group(disabled),
+::view-transition-old(disabled),
+::view-transition-new(disabled) {
+	animation-duration: 0 !important;
 }
